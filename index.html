@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haven Properties</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .active-nav { background-color: rgba(255, 255, 255, 0.15); border-radius: 0.375rem; }
+        .text-maroon-800 { color: #800000; }
+        .bg-maroon-800 { background-color: #800000; }
+        .border-maroon-800 { border-color: #800000; }
+        #side-nav-links {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,.55) rgba(255,255,255,.10);
+            scrollbar-gutter: stable;
+        }
+        #side-nav-links::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        #side-nav-links::-webkit-scrollbar-track {
+            background: rgba(255,255,255,.10);
+        }
+
+        #side-nav-links::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,.45);
+            border-radius: 10px;
+        }
+
+        #side-nav-links::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,.75);
+        }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans flex flex-col md:flex-row h-screen overflow-hidden">
+
+    <aside class="w-full md:w-64 bg-purple-700 text-white flex flex-col md:justify-between shrink-0 shadow-xl z-30 sticky top-0 md:h-screen" id="main-sidebar">
+        
+        <div class="flex flex-col flex-1 overflow-hidden">
+            <div class="bg-purple-800 py-3 md:py-4 px-4 md:px-6 shadow-md border-b border-purple-600 flex items-center justify-between md:block shrink-0">
+                <button type="button" onclick="showPage('dashboard')" class="flex items-center space-x-2 text-left hover:opacity-90 transition" title="Go to dashboard">
+                    <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    <h1 class="text-md font-black tracking-tight font-serif text-maroon-800 bg-white px-2 py-0.5 rounded shadow-sm">Haven Homes</h1>
+                </button>
+            </div>
+            
+            <nav class="flex flex-row md:flex-col px-2 md:px-4 py-2 md:py-4 gap-1 overflow-x-auto md:overflow-y-scroll whitespace-nowrap md:whitespace-normal md:pr-1" id="side-nav-links">
+                <a href="#dashboard" onclick="showPage('dashboard')" class="nav-link active-nav inline-flex items-center space-x-2 md:space-x-3 px-3 md:px-4 py-2 md:py-3 hover:bg-purple-600 transition duration-200 text-xs md:text-sm rounded-md shrink-0">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z"></path></svg>
+                    <span class="font-medium">Dashboard</span>
+                </a>
+                <a href="#properties" onclick="showPage('properties')" class="nav-link inline-flex items-center space-x-2 md:space-x-3 px-3 md:px-4 py-2 md:py-3 hover:bg-purple-600 rounded-md transition duration-200 text-xs md:text-sm shrink-0">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                    <span class="font-medium">Properties</span>
+                </a>
+                <a href="#units" onclick="showPage('units')" class="nav-link inline-flex items-center space-x-2 md:space-x-3 px-3 md:px-4 py-2 md:py-3 hover:bg-purple-600 rounded-md transition duration-200 text-xs md:text-sm shrink-0">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    <span class="font-medium">Units</span>
+                </a>
+                <a href="#tenants" onclick="showPage('tenants')" class="nav-link inline-flex items-center space-x-2 md:space-x-3 px-3 md:px-4 py-2 md:py-3 hover:bg-purple-600 rounded-md transition duration-200 text-xs md:text-sm shrink-0">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    <span class="font-medium">Tenants</span>
+                </a>
+                <a href="#payments" onclick="showPage('payments')" class="nav-link inline-flex items-center space-x-2 md:space-x-3 px-3 md:px-4 py-2 md:py-3 hover:bg-purple-600 rounded-md transition duration-200 text-xs md:text-sm shrink-0">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span class="font-medium">Payments</span>
+                </a>
+                <a href="#communications" onclick="showPage('communications')" class="nav-link inline-flex items-center space-x-2 md:space-x-3 px-3 md:px-4 py-2 md:py-3 hover:bg-purple-600 rounded-md transition duration-200 text-xs md:text-sm shrink-0 relative">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    <span class="font-medium">Communication</span>
+                    <span id="nav-chat-counter" class="absolute top-1 right-2 bg-emerald-500 text-white font-bold text-[10px] px-1.5 py-0.5 rounded-full hidden">0</span>
+                </a>
+                <a href="#reports" onclick="showPage('reports')" class="nav-link inline-flex items-center space-x-2 md:space-x-3 px-3 md:px-4 py-2 md:py-3 hover:bg-purple-600 rounded-md transition duration-200 text-xs md:text-sm shrink-0">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <span class="font-medium">Reports</span>
+                </a>
+                <a href="#recycle-bin" onclick="showPage('recycle-bin')" class="nav-link inline-flex items-center space-x-2 md:space-x-3 px-3 md:px-4 py-2 md:py-3 hover:bg-purple-600 rounded-md transition duration-200 text-xs md:text-sm shrink-0 md:hidden">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    <span class="font-medium">Recycle Bin (<span class="bin-counter-span">0</span>)</span>
+                </a>
+                
+                <button onclick="globalLogout()" class="md:hidden bg-red-600 hover:bg-red-700 text-white font-semibold px-2.5 py-1 rounded text-[11px] tracking-wide transition shrink-0 ml-4 self-center shadow-sm">
+                    Logout
+                </button>
+            </nav>
+        </div>
+
+        <div class="hidden md:block p-4 border-t border-purple-600 bg-purple-800 bg-opacity-40 space-y-3">
+            <div class="relative">
+                <div id="sidebar-bin-counter" class="absolute -top-2 -right-2 bg-amber-400 text-purple-950 font-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center border border-white shadow animate-bounce">0</div>
+                <button onclick="showPage('recycle-bin')" class="w-full bg-purple-900 hover:bg-purple-950 border border-purple-500 text-white text-xs font-bold py-2 px-3 rounded flex items-center justify-center space-x-2 transition shadow-inner">
+                    <svg class="w-3.5 h-3.5 text-amber-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    <span>Recycle Storage Bin</span>
+                </button>
+            </div>
+            <button onclick="globalLogout()" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-1.5 px-3 rounded shadow-sm text-xs tracking-wide transition">
+                Logout Session
+            </button>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col h-full overflow-hidden relative">
+        <div class="md:hidden fixed top-2 right-2 z-50 flex items-center gap-2">
+            <button onclick="showPage('tenant-auth')" class="bg-purple-100/95 backdrop-blur hover:bg-purple-200 text-purple-700 px-2.5 py-1 rounded-lg text-[10px] font-semibold transition shadow-lg border border-purple-200">Tenant Portal</button>
+            <button onclick="showPage('landlord-auth')" class="bg-indigo-100/95 backdrop-blur hover:bg-indigo-200 text-indigo-700 px-2.5 py-1 rounded-lg text-[10px] font-semibold transition shadow-lg border border-indigo-200">Landlord Portal</button>
+        </div>
+        
+        <header class="bg-white border-b border-gray-200 min-h-16 py-3 flex flex-row items-center justify-between px-4 md:px-8 shadow-sm gap-2 shrink-0 sticky top-0 z-20">
+            <div class="text-sm md:text-xl font-bold text-gray-700 truncate max-w-[46%] md:max-w-none" id="panel-title">Dashboard Overview</div>
+            <div class="flex items-center justify-end gap-1.5 md:gap-2 w-auto overflow-x-auto whitespace-nowrap no-scrollbar">
+                <button onclick="showPage('tenant-auth')" id="btn-tenant-portal" class="bg-purple-100 hover:bg-purple-200 text-purple-700 px-2 py-1 md:px-4 md:py-2 rounded-lg text-[10px] md:text-sm font-semibold transition shadow-sm shrink-0">Tenant Portal</button>
+                <button onclick="showPage('landlord-auth')" id="btn-landlord-portal" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-700 px-2 py-1 md:px-4 md:py-2 rounded-lg text-[10px] md:text-sm font-semibold transition shadow-sm shrink-0">Landlord Portal</button>
+                <button onclick="exitToCRM()" id="btn-crm-dashboard" class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 md:px-4 md:py-2 rounded-lg text-[10px] md:text-sm font-semibold transition shadow-sm shrink-0">← Back to CRM</button>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 pb-24">
+
+            <section id="dashboard" class="page-section space-y-6">
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div onclick="showPage('units')" class="bg-white p-5 h-24 rounded-xl shadow-sm border border-l-4 border-green-500 flex flex-col justify-center cursor-pointer hover:bg-gray-50 transform hover:-translate-y-0.5 transition shadow">
+                        <div class="text-xs font-bold text-gray-400 uppercase mb-0.5">Total Rent Billed</div>
+                        <div class="text-lg font-black text-gray-800">Ksh <span id="stat-billed">0</span></div>
+                    </div>
+                    <div onclick="showPage('payments')" class="bg-white p-5 h-24 rounded-xl shadow-sm border border-l-4 border-purple-500 flex flex-col justify-center cursor-pointer hover:bg-gray-50 transform hover:-translate-y-0.5 transition shadow">
+                        <div class="text-xs font-bold text-gray-400 uppercase mb-0.5">Total Collected</div>
+                        <div class="text-lg font-black text-gray-800">Ksh <span id="stat-collected">0</span></div>
+                    </div>
+                    <div onclick="showPage('tenants')" class="bg-white p-5 h-24 rounded-xl shadow-sm border border-l-4 border-red-500 flex flex-col justify-center cursor-pointer hover:bg-gray-50 transform hover:-translate-y-0.5 transition shadow">
+                        <div class="text-xs font-bold text-gray-400 uppercase mb-0.5">Total Outstanding</div>
+                        <div class="text-lg font-black text-gray-800">Ksh <span id="stat-outstanding">0</span></div>
+                    </div>
+                    <div onclick="showPage('units')" class="bg-white p-5 h-24 rounded-xl shadow-sm border border-l-4 border-blue-500 flex flex-col justify-center cursor-pointer hover:bg-gray-50 transform hover:-translate-y-0.5 transition shadow">
+                        <div class="text-xs font-bold text-gray-400 uppercase mb-0.5">Occupancy Rate</div>
+                        <div class="text-lg font-black text-gray-800" id="stat-occupancy">0%</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div onclick="showPage('properties')" class="bg-gradient-to-br from-indigo-50 to-indigo-100 p-5 h-24 rounded-xl shadow-sm border border-indigo-200 flex items-center justify-between cursor-pointer hover:opacity-90 transition shadow-sm">
+                        <div>
+                            <div class="text-xs font-bold text-indigo-500 uppercase tracking-wide">Properties</div>
+                            <div class="text-2xl font-black text-indigo-900 mt-1" id="stat-count-properties">0</div>
+                        </div>
+                        <div class="bg-indigo-500 text-white p-2 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                        </div>
+                    </div>
+                    <div onclick="showPage('units')" class="bg-gradient-to-br from-teal-50 to-teal-100 p-5 h-24 rounded-xl shadow-sm border border-teal-200 flex items-center justify-between cursor-pointer hover:opacity-90 transition shadow-sm">
+                        <div>
+                            <div class="text-xs font-bold text-teal-500 uppercase tracking-wide">Total Units</div>
+                            <div class="text-2xl font-black text-teal-900 mt-1" id="stat-count-units">0</div>
+                        </div>
+                        <div class="bg-teal-500 text-white p-2 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        </div>
+                    </div>
+                    <div onclick="showPage('tenants')" class="bg-gradient-to-br from-purple-50 to-purple-100 p-5 h-24 rounded-xl shadow-sm border border-purple-200 flex items-center justify-between cursor-pointer hover:opacity-90 transition shadow-sm">
+                        <div>
+                            <div class="text-xs font-bold text-purple-500 uppercase tracking-wide">Active Tenants</div>
+                            <div class="text-2xl font-black text-purple-900 mt-1" id="stat-count-tenants">0</div>
+                        </div>
+                        <div class="bg-purple-500 text-white p-2 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        </div>
+                    </div>
+                    <div onclick="showPage('payments')" class="bg-gradient-to-br from-amber-50 to-amber-100 p-5 h-24 rounded-xl shadow-sm border border-amber-200 flex items-center justify-between cursor-pointer hover:opacity-90 transition shadow-sm">
+                        <div>
+                            <div class="text-xs font-bold text-amber-500 uppercase tracking-wide">Unpaid Invoices</div>
+                            <div class="text-2xl font-black text-amber-900 mt-1" id="stat-count-invoices">0</div>
+                        </div>
+                        <div class="bg-amber-500 text-white p-2 rounded-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b pb-2 mb-3">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-bold text-sm text-gray-700">Recurrent Monthly Billing Cycle Tracker</span>
+                            <span class="text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded font-mono font-semibold">Active Engine Ledger</span>
+                        </div>
+                        <div class="text-[11px] text-amber-800 bg-amber-50 px-2 py-1 rounded border border-amber-200">
+                            ⚠️ <strong>Rolling Arrears Rule:</strong> Dynamic forward propagation active. Original invoice archives remain static.
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 items-end">
+                        <div class="w-full sm:w-72">
+                            <label class="block text-xs font-bold text-gray-500 mb-1">Target Billing Period Ledger:</label>
+                            <select id="calendar-billing-month" onchange="syncBillingCycle()" class="w-full p-2 border rounded-lg text-xs font-semibold bg-gray-50 outline-none text-purple-900">
+                                <option value="2026-06">June 2026 (Current Cycle)</option>
+                                <option value="2026-07">July 2026 (Next Forward Roll)</option>
+                                <option value="2026-05">May 2026 (Historical Ledger)</option>
+                            </select>
+                        </div>
+                        <p class="text-xs text-gray-500 pb-2">Updating the billing tracking cycle syncs financial collection balances cross-functionally through all landlord/tenant ledger pages.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100 lg:col-span-2">
+                        <h3 class="text-md font-bold text-gray-700 mb-3">Revenue Overview Analytics (Ksh)</h3>
+                        <div class="h-60 relative"><canvas id="revenueBarChart"></canvas></div>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="text-md font-bold text-gray-700 mb-3">Payment Distribution Stack</h3>
+                        <div class="h-60 flex justify-center relative"><canvas id="paymentPieChart"></canvas></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="properties" class="page-section hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <h2 class="text-2xl font-bold text-gray-800">Properties Registry</h2>
+                    <button onclick="openModal('modal-property')" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded-lg shadow transition"> + Add New Property</button>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border flex flex-col sm:flex-row gap-3 items-center">
+                    <select id="search-prop-field" class="w-full sm:w-1/3 p-2 border rounded-lg text-sm bg-gray-50"><option value="all">Search All Columns</option><option value="name">Property Name</option><option value="location">Location</option><option value="landlord">Landlord Email</option></select>
+                    <input type="text" id="search-prop-input" onkeyup="renderPropertiesTable()" placeholder="Type to filter properties ledger..." class="w-full sm:w-2/3 p-2 border rounded-lg text-sm outline-none">
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border overflow-x-auto">
+                    <table class="w-full text-left min-w-[600px]"><thead class="bg-gray-50 text-xs font-semibold uppercase text-gray-500 border-b"><tr><th class="p-4">Property Name</th><th class="p-4">Location</th><th class="p-4">Landlord Email Key</th><th class="p-4 text-center">Unit Count</th><th class="p-4 text-center">Actions</th></tr></thead><tbody id="table-properties-body" class="divide-y divide-gray-100 text-sm text-gray-600"></tbody></table>
+                </div>
+            </section>
+
+            <section id="units" class="page-section hidden space-y-6 relative">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <h2 class="text-2xl font-bold text-gray-800">Units Inventory</h2>
+                    <button onclick="openModal('modal-unit')" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded-lg shadow transition"> + Add New Unit</button>
+                </div>
+                
+                <div class="bg-white p-4 rounded-xl shadow-sm border flex flex-col sm:flex-row gap-3 items-center">
+                    <select id="search-unit-field" class="w-full sm:w-1/3 p-2 border rounded-lg text-sm bg-gray-50"><option value="all">Search All Columns</option><option value="code">Unit Code</option><option value="complex">Property Complex</option><option value="type">Unit Type</option><option value="status">Status</option></select>
+                    <input type="text" id="search-unit-input" onkeyup="renderUnitsTable()" placeholder="Type to filter inventory records..." class="w-full sm:w-2/3 p-2 border rounded-lg text-sm outline-none">
+                </div>
+
+                <div class="relative group">
+                    <button onclick="scrollGrid('units-scroll-box', -250)" class="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-purple-600 hover:bg-purple-800 text-white shadow-xl flex items-center justify-center font-bold text-lg focus:outline-none transition">‹</button>
+                    <button onclick="scrollGrid('units-scroll-box', 250)" class="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-purple-600 hover:bg-purple-800 text-white shadow-xl flex items-center justify-center font-bold text-lg focus:outline-none transition">›</button>
+                    
+                    <div id="units-scroll-box" class="bg-white rounded-xl shadow-sm border overflow-x-auto  scroll-smooth px-3 sm:px-6">
+                        <table class="w-full text-left min-w-[900px]">
+                            <thead class="bg-gray-50 text-xs font-semibold uppercase text-gray-500 border-b">
+                                <tr>
+                                    <th class="p-4">Property Complex Tree</th>
+                                    <th class="p-4">Unit #</th>
+                                    <th class="p-4">Unit Type</th>
+                                    <th class="p-4">Monthly Rate</th>
+                                    <th class="p-4 text-center">Unit Status</th>
+                                    <th class="p-4">Paid This Month</th>
+                                    <th class="p-4 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-units-body" class="divide-y divide-gray-100 text-sm text-gray-600"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 max-w-sm mx-auto mt-4">
+                    <h3 class="text-xs font-bold text-center uppercase text-gray-400 tracking-wider mb-2">Portfolio Occupancy Matrix Chart</h3>
+                    <div class="h-36 flex justify-center relative"><canvas id="unitsStatusPieChart"></canvas></div>
+                </div>
+            </section>
+
+            <section id="tenants" class="page-section hidden space-y-6 relative">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <h2 class="text-2xl font-bold text-gray-800">Tenants Index</h2>
+                    <div class="flex gap-2 flex-wrap justify-end">
+                        <button onclick="openMpesaPaymentModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded-lg shadow transition">Pay with M-Pesa</button>
+                        <button onclick="openModal('modal-tenant')" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded-lg shadow transition"> + Add New Tenant</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-purple-50 p-4 rounded-xl border border-purple-200">
+                        <span class="text-xs text-purple-600 font-bold uppercase block">Lease Engagements</span>
+                        <span class="text-xl font-black text-purple-900" id="box-tenant-count">0 Active</span>
+                    </div>
+                    <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                        <span class="text-xs text-emerald-600 font-bold uppercase block">Current Month Paid</span>
+                        <span class="text-xl font-black text-emerald-900" id="box-tenant-paid">Ksh 0</span>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-200">
+                        <span class="text-xs text-blue-600 font-bold uppercase block">Total Deposit Held</span>
+                        <span class="text-xl font-black text-blue-900" id="box-tenant-deposits">Ksh 0</span>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-xl border border-red-200">
+                        <span class="text-xs text-red-600 font-bold uppercase block">Accumulated Arrears</span>
+                        <span class="text-xl font-black text-red-900" id="box-tenant-arrears">Ksh 0</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl shadow-sm border flex flex-col sm:flex-row gap-3 items-center">
+                    <select id="search-tenant-field" class="w-full sm:w-1/3 p-2 border rounded-lg text-sm bg-gray-50"><option value="all">Search All Columns</option><option value="name">Tenant Name</option><option value="email">Email Key</option><option value="unit">Assigned Unit Data</option></select>
+                    <input type="text" id="search-tenant-input" onkeyup="renderTenantsTable()" placeholder="Type to filter client listings..." class="w-full sm:w-2/3 p-2 border rounded-lg text-sm outline-none">
+                </div>
+
+                <div class="relative group">
+                    <button onclick="scrollGrid('tenants-scroll-box', -250)" class="absolute left-1 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-purple-600 hover:bg-purple-800 text-white shadow-xl flex items-center justify-center font-bold text-lg focus:outline-none transition">‹</button>
+                    <button onclick="scrollGrid('tenants-scroll-box', 250)" class="absolute right-1 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-purple-600 hover:bg-purple-800 text-white shadow-xl flex items-center justify-center font-bold text-lg focus:outline-none transition">›</button>
+
+                    <div id="tenants-scroll-box" class="bg-white rounded-xl shadow-sm border overflow-x-auto  scroll-smooth px-3 sm:px-6">
+                        <table class="w-full text-left min-w-[1050px]">
+                            <thead class="bg-gray-50 text-xs font-semibold uppercase text-gray-500 border-b">
+                                <tr>
+                                    <th class="p-4">Tenant Name</th>
+                                    <th class="p-4">Email Address (Key)</th>
+                                    <th class="p-4">Assigned Unit & Type</th>
+                                    <th class="p-4">Rent / Mo</th>
+                                    <th class="p-4">Paid This Month</th>
+                                    <th class="p-4">Deposit Held</th>
+                                    <th class="p-4">Wallet Balance</th>
+                                    <th class="p-4">Outstanding Due</th>
+                                    <th class="p-4 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-tenants-body" class="divide-y divide-gray-100 text-sm text-gray-600"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="payments" class="page-section hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <h2 class="text-2xl font-bold text-gray-800">Ledger Payments</h2>
+                    <button onclick="openModal('modal-payment')" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded-lg shadow transition"> + Record Payment</button>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border flex flex-col sm:flex-row gap-3 items-center">
+                    <select id="search-pay-field" class="w-full sm:w-1/3 p-2 border rounded-lg text-sm bg-gray-50"><option value="all">Search All Columns</option><option value="email">Payer Email Ref</option><option value="method">Method Used</option></select>
+                    <input type="text" id="search-pay-input" onkeyup="renderPaymentsTable()" placeholder="Type to filter receipts data logs..." class="w-full sm:w-2/3 p-2 border rounded-lg text-sm outline-none">
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border overflow-x-auto">
+                    <table class="w-full text-left min-w-[600px]"><thead class="bg-gray-50 text-xs font-semibold uppercase text-gray-500 border-b"><tr><th class="p-4">Payer Email Ref</th><th class="p-4">Amount Allocation</th><th class="p-4">Method Used</th><th class="p-4">Timestamp</th></tr></thead><tbody id="table-payments-body" class="divide-y divide-gray-100 text-sm text-gray-600"></tbody></table>
+                </div>
+            </section>
+
+            <section id="communications" class="page-section hidden bg-white border border-gray-200 rounded-xl shadow-sm min-h-[calc(100vh-180px)] md:h-[calc(100vh-180px)] overflow-y-auto md:overflow-hidden flex flex-col md:flex-row">
+                    <div class="w-full md:w-80 border-r-0 md:border-r border-b md:border-b-0 border-gray-200 flex flex-col h-auto md:h-full bg-gray-50">
+                        <div class="p-4 bg-purple-900 text-white flex flex-col space-y-2 shrink-0">
+                            <h3 class="text-xs font-black uppercase tracking-wider">Communication Pipelines</h3>
+                            <div class="flex bg-purple-950/50 p-1 rounded-lg text-[10px]">
+                                <button id="chat-filter-tenants" onclick="switchChatQueue('Tenant')" class="flex-1 py-1 text-center font-semibold bg-white text-purple-700 rounded shadow-sm">Tenants Queue</button>
+                                <button id="chat-filter-landlords" onclick="switchChatQueue('Landlord')" class="flex-1 py-1 text-center font-semibold text-white hover:text-purple-200">Landlords Queue</button>
+                            </div>
+                        </div>
+                        <div id="chat-users-list" class="flex-1 overflow-y-auto divide-y divide-gray-100 max-h-64 md:max-h-none">
+                            </div>
+                    </div>
+
+                    <div class="flex-1 flex flex-col h-full bg-slate-50 relative min-h-[32rem] md:min-h-0">
+                        <div class="h-14 bg-white border-b border-gray-200 flex items-center px-4 space-x-3 shrink-0">
+                            <div id="chat-target-avatar" class="w-8 h-8 rounded-full bg-purple-700 text-white font-bold flex items-center justify-center text-xs">?</div>
+                            <h4 id="chat-window-header" class="text-xs font-bold text-gray-800">Select a thread message log</h4>
+                        </div>
+                        
+                        <div id="chat-messages-container" class="flex-1 p-4 overflow-y-auto space-y-3.5 min-h-[18rem] md:min-h-0">
+                            </div>
+
+                        <div class="p-3 bg-white border-t border-gray-200 shrink-0">
+                            <div class="flex items-center space-x-2 bg-gray-100 rounded-lg px-3 py-1.5 border border-gray-200">
+                                <input type="file" id="chat-attachment" class="hidden" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt" onchange="handleChatAttachmentSelect('Admin', this.files)" />
+                                <button type="button" onclick="document.getElementById('chat-attachment').click()" class="shrink-0 text-purple-700 hover:text-purple-900 transition p-1.5 rounded-md hover:bg-white" title="Upload document or image">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16.5v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 3v12m0 0l-4-4m4 4l4-4"></path></svg>
+                                </button>
+                                <input id="chat-input-text" type="text" placeholder="Type administrative transmission message package row..." class="flex-1 bg-transparent border-none text-xs focus:outline-none outline-none text-gray-800" onkeydown="if(event.key === 'Enter') handleMessageSending()" />
+                                <button onclick="handleMessageSending()" class="text-purple-700 hover:text-purple-900 transition p-1">
+                                    <svg class="w-5 h-5 rotate-90 origin-center" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            <section id="reports" class="page-section hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800">Advanced Matrix Reports</h2>
+                        <p class="text-xs text-gray-500">Tenant and landlord data exports are available in Excel-compatible format.</p>
+                    </div>
+                </div>
+                <div id="report-status" class="hidden bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold px-3 py-2 rounded-lg"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-5 rounded-xl shadow-sm border">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">Tenant Report</h3>
+                                <p class="text-xs text-gray-500">Downloadable tenant statement data for tenant requests.</p>
+                            </div>
+                            <button onclick="downloadReportData('tenant')" class="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-3 py-2 rounded-lg shadow-sm">Download Tenant Excel</button>
+                        </div>
+                        <div class="overflow-x-auto rounded-lg border">
+                            <table class="w-full text-left min-w-[760px]">
+                                <thead class="bg-gray-50 text-xs font-semibold uppercase text-gray-500 border-b">
+                                    <tr>
+                                        <th class="p-3">Tenant</th>
+                                        <th class="p-3">Email</th>
+                                        <th class="p-3">Unit</th>
+                                        <th class="p-3">Rent</th>
+                                        <th class="p-3">Paid</th>
+                                        <th class="p-3">Deposit</th>
+                                        <th class="p-3">Balance</th>
+                                        <th class="p-3">Arrears</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tenant-report-body" class="divide-y divide-gray-100 text-sm text-gray-600"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl shadow-sm border">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">Landlord Report</h3>
+                                <p class="text-xs text-gray-500">Property-level occupancy and rent data for landlord requests.</p>
+                            </div>
+                            <button onclick="downloadReportData('landlord')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-lg shadow-sm">Download Landlord Excel</button>
+                        </div>
+                        <div class="overflow-x-auto rounded-lg border">
+                            <table class="w-full text-left min-w-[760px]">
+                                <thead class="bg-gray-50 text-xs font-semibold uppercase text-gray-500 border-b">
+                                    <tr>
+                                        <th class="p-3">Property</th>
+                                        <th class="p-3">Location</th>
+                                        <th class="p-3">Landlord</th>
+                                        <th class="p-3">Units</th>
+                                        <th class="p-3">Occupied</th>
+                                        <th class="p-3">Vacant</th>
+                                        <th class="p-3">Occupancy</th>
+                                        <th class="p-3">Billed</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="landlord-report-body" class="divide-y divide-gray-100 text-sm text-gray-600"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="recycle-bin" class="page-section hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b pb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800 flex items-center space-x-2">
+                            <svg class="w-7 h-7 text-amber-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            <span>Recycled Assets Engine Repository</span>
+                        </h2>
+                        <p class="text-xs text-gray-500 mt-1">Temporary storage warehouse for purged records. Elements are automatically dropped permanently after exactly <strong>60 days</strong> inside isolation.</p>
+                    </div>
+                    <button onclick="clearAllRecycleBin()" class="bg-red-700 hover:bg-red-800 text-white font-bold px-4 py-2 rounded-lg text-xs tracking-wide shadow transition">
+                        Purge Repository Completely
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+                    <table class="w-full text-left min-w-[700px]">
+                        <thead class="bg-gray-100 text-xs font-bold uppercase text-gray-600 border-b">
+                            <tr>
+                                <th class="p-4">Asset Family Node</th>
+                                <th class="p-4">Ident Mapping Key Reference</th>
+                                <th class="p-4">Primary Meta Context Description Data</th>
+                                <th class="p-4">Purge Countdown Timestamp</th>
+                                <th class="p-4 text-center">System Override Commands</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-recycle-body" class="divide-y divide-gray-100 text-xs text-gray-600 bg-white">
+                            </tbody>
+                    </table>
+                    <div id="bin-empty-placeholder" class="p-12 text-center hidden">
+                        <svg class="w-12 h-12 mx-auto text-gray-300 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25m-2-2.25l-2.25 2.25m2-2.25l2.25-2.25M3.75 7.5h16.5M9 3.75h6m-6 0a1 1 0 00-1 1v1.5h8V4.75a1 1 0 00-1-1h-6z"></path></svg>
+                        <p class="text-sm font-medium text-gray-400">The storage engine ledger is completely empty.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="tenant-auth" class="page-section hidden max-w-md mx-auto my-6 bg-white p-6 rounded-xl shadow-md border">
+                <h2 class="text-lg font-bold text-gray-800 mb-2">Tenant Access Gateway</h2>
+                <div class="space-y-4">
+                    <input type="email" id="auth-tenant-email" placeholder="jane@example.com" class="w-full p-2.5 border rounded-lg text-sm">
+                    <div id="tenant-auth-error" class="text-xs text-red-600 hidden font-semibold">Email address not verified in tenant directory index.</div>
+                    <button onclick="authenticateTenant()" class="w-full bg-purple-600 text-white font-bold p-2.5 rounded-lg text-sm">Verify Portfolio Access</button>
+                </div>
+            </section>
+
+            <section id="tenant-portal" class="page-section hidden space-y-6">
+                <div class="bg-gradient-to-r from-purple-700 to-indigo-800 p-6 rounded-2xl text-white shadow flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-black" id="tp-welcome">Welcome back!</h2>
+                        <p class="text-purple-200 text-xs mt-1 font-mono" id="tp-email-sub">account: --</p>
+                    </div>
+                    <span class="px-3 py-1.5 bg-white bg-opacity-20 backdrop-blur-md text-white text-xs font-bold rounded-lg border border-purple-400" id="tp-unit-badge">Unit: --</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-emerald-500">
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">Available Wallet</div>
+                        <div class="text-xl font-black text-gray-800 mt-1">Ksh <span id="tp-wallet">0</span></div>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-indigo-500">
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">Base Contract Rent</div>
+                        <div class="text-xl font-black text-gray-800 mt-1">Ksh <span id="tp-rent">0</span></div>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-rose-500">
+                        <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">Arrears Balance Due</div>
+                        <div class="text-xl font-black text-rose-600 mt-1">Ksh <span id="tp-outstanding">0</span></div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border shadow-sm max-w-xl mx-auto">
+                    <h3 class="font-bold text-sm text-purple-900 border-b pb-2 mb-3 flex items-center justify-between">
+                        <span>Chat Support with Haven Admin Agent</span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    </h3>
+                    <div id="tp-chat-messages-container" class="h-64 overflow-y-auto p-3 bg-gray-50 rounded border mb-3 space-y-2 no-scrollbar text-xs"></div>
+                    <div class="flex gap-2 items-center">
+                        <input type="file" id="tp-chat-attachment" class="hidden" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt" onchange="handleChatAttachmentSelect('Tenant', this.files)" />
+                        <button type="button" onclick="document.getElementById('tp-chat-attachment').click()" class="shrink-0 bg-gray-100 hover:bg-gray-200 text-purple-700 p-2 rounded-lg border border-gray-200" title="Upload document or image">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16.5v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 3v12m0 0l-4-4m4 4l4-4"></path></svg>
+                        </button>
+                        <input type="text" id="tp-chat-input" placeholder="Type message to agent..." onkeyup="if(event.key === 'Enter') sendUserSideMessage('Tenant')" class="flex-1 p-2 border rounded-lg text-xs outline-none">
+                        <button onclick="sendUserSideMessage('Tenant')" class="bg-purple-600 text-white px-4 py-1.5 rounded-lg font-bold text-xs">Send</button>
+                    </div>
+                    <div class="mt-3 flex justify-end">
+                        <button onclick="openMpesaPaymentModal(currentTenantEmail)" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold text-xs">Pay with M-Pesa</button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="landlord-auth" class="page-section hidden max-w-md mx-auto my-6 bg-white p-6 rounded-xl shadow-md border">
+                <h2 class="text-lg font-bold text-gray-800 mb-2">Landlord Administration Portal Verification</h2>
+                <div class="space-y-4">
+                    <input type="email" id="auth-landlord-email" placeholder="landlord@example.com" class="w-full p-2.5 border rounded-lg text-sm">
+                    <button onclick="authenticateLandlord()" class="w-full bg-indigo-600 text-white font-bold p-2.5 rounded-lg text-sm">Verify Landlord Signature</button>
+                </div>
+            </section>
+
+            <section id="landlord-portal" class="page-section hidden space-y-6">
+                <div class="bg-gradient-to-r from-indigo-700 to-purple-800 p-6 rounded-2xl text-white shadow flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold" id="lp-welcome">Landlord Portfolio Workspace</h2>
+                        <p class="text-xs text-indigo-200 mt-1" id="lp-email-sub">Verified Portfolio Key Chain Link</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-xl border-l-4 border-purple-600 shadow-sm">
+                        <span class="text-xs text-gray-400 uppercase font-bold block">Assigned Buildings</span>
+                        <span class="text-lg font-black text-gray-800" id="lp-stat-properties">0 Buildings</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border-l-4 border-emerald-500 shadow-sm">
+                        <span class="text-xs text-gray-400 uppercase font-bold block">Occupied Units</span>
+                        <span class="text-lg font-black text-emerald-600" id="lp-stat-occupied">0 Occupied</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border-l-4 border-amber-500 shadow-sm">
+                        <span class="text-xs text-gray-400 uppercase font-bold block">Vacant Inventory</span>
+                        <span class="text-lg font-black text-amber-600" id="lp-stat-vacant">0 Vacant</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border-l-4 border-blue-500 shadow-sm">
+                        <span class="text-xs text-gray-400 uppercase font-bold block">Collected Collected MTD</span>
+                        <span class="text-lg font-black text-blue-600" id="lp-stat-collected">Ksh 0</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border-l-4 border-indigo-500 shadow-sm">
+                    <span class="text-xs text-gray-400 uppercase font-bold block">Expected Book Yield</span>
+                    <span class="text-xl font-black text-indigo-900" id="lp-stat-expected">Ksh 0</span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-5 rounded-xl shadow-sm border">
+                        <h4 class="text-xs font-bold uppercase text-gray-400 tracking-wider mb-2">Occupancy Distribution Matrix</h4>
+                        <div class="h-48 relative"><canvas id="landlordPieChart"></canvas></div>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border overflow-x-auto">
+                        <h4 class="text-xs font-bold uppercase text-gray-400 tracking-wider mb-2">Associated Real Estate Assets</h4>
+                        <table class="w-full text-xs text-left"><thead class="bg-gray-100 border-b"><tr><th class="p-2">Property Name</th><th class="p-2">Location</th><th class="p-2 text-center">Units</th></tr></thead><tbody id="lp-table-body" class="divide-y text-gray-600"></tbody></table>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border shadow-sm max-w-xl mx-auto mt-6">
+                    <h3 class="font-bold text-sm text-indigo-900 border-b pb-2 mb-3 flex items-center justify-between">
+                        <span>Chat Support with Haven Management Admin</span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    </h3>
+                    <div id="lp-chat-messages-container" class="h-64 overflow-y-auto p-3 bg-gray-50 rounded border mb-3 space-y-2 no-scrollbar text-xs"></div>
+                    <div class="flex gap-2 items-center">
+                        <input type="file" id="lp-chat-attachment" class="hidden" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt" onchange="handleChatAttachmentSelect('Landlord', this.files)" />
+                        <button type="button" onclick="document.getElementById('lp-chat-attachment').click()" class="shrink-0 bg-gray-100 hover:bg-gray-200 text-indigo-700 p-2 rounded-lg border border-gray-200" title="Upload document or image">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16.5v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 3v12m0 0l-4-4m4 4l4-4"></path></svg>
+                        </button>
+                        <input type="text" id="lp-chat-input" placeholder="Type message to management admin..." onkeyup="if(event.key === 'Enter') sendUserSideMessage('Landlord')" class="flex-1 p-2 border rounded-lg text-xs outline-none">
+                        <button onclick="sendUserSideMessage('Landlord')" class="bg-indigo-600 text-white px-4 py-1.5 rounded-lg font-bold text-xs">Send</button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <div class="fixed bottom-5 right-5 z-50">
+        <div class="relative">
+            <div id="floating-chat-counter" class="absolute -top-1 -right-1 bg-emerald-500 text-white font-black text-[10px] w-5 h-5 rounded-full flex items-center justify-center border border-white shadow hidden animate-bounce">0</div>
+            <button onclick="toggleFloatingChat()" class="bg-purple-600 hover:bg-purple-700 text-white p-3.5 rounded-full shadow-2xl flex items-center justify-center transform hover:scale-105 transition focus:outline-none" title="Quick Message Center Hub">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="modal-property" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <h3 class="text-md font-bold text-gray-800" id="property-modal-title">Add Property Building</h3>
+            <input type="hidden" id="edit-property-id" value="">
+            <div class="space-y-3">
+                <input type="text" id="prop-name" placeholder="Property Building Name" class="w-full p-2 border rounded text-xs outline-none">
+                <input type="text" id="prop-location" placeholder="Physical Location Area" class="w-full p-2 border rounded text-xs outline-none">
+                <input type="email" id="prop-landlord" placeholder="Landlord Contact Email" class="w-full p-2 border rounded text-xs outline-none">
+            </div>
+            <div class="flex justify-end gap-2 text-xs font-semibold"><button onclick="closeModal('modal-property')" class="bg-gray-100 px-4 py-2 rounded">Cancel</button><button onclick="saveProperty()" class="bg-purple-600 text-white px-4 py-2 rounded">Commit Property</button></div>
+        </div>
+    </div>
+
+    <div id="modal-unit" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <h3 class="text-md font-bold text-gray-800" id="unit-modal-title">Create New Unit Record Slot</h3>
+            <input type="hidden" id="edit-unit-id" value="">
+            <div class="space-y-3">
+                <input type="text" id="unit-code" placeholder="Unit Ident Code (e.g. A101)" class="w-full p-2 border rounded text-xs outline-none">
+                <select id="unit-complex" class="w-full p-2 border rounded text-xs bg-white outline-none"></select>
+                <select id="unit-type" class="w-full p-2 border rounded text-xs bg-white outline-none">
+                    <option value="single">single</option><option value="bedsitter">bedsitter</option><option value="one bedroom">one bedroom</option><option value="two bedroom">two bedroom</option><option value="three bedroom">three bedroom</option><option value="commercial room">commercial room</option>
+                </select>
+                <input type="number" id="unit-rate" placeholder="Monthly Base Rental Rate Price (Ksh)" class="w-full p-2 border rounded text-xs outline-none">
+            </div>
+            <div class="flex justify-end gap-2 text-xs font-semibold"><button onclick="closeModal('modal-unit')" class="bg-gray-100 px-4 py-2 rounded">Cancel</button><button onclick="saveUnit()" class="bg-purple-600 text-white px-4 py-2 rounded">Commit Slot</button></div>
+        </div>
+    </div>
+
+    <div id="modal-tenant" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <h3 class="text-md font-bold text-gray-800" id="tenant-modal-title">Add Lease Engagement Tenant Profile</h3>
+            <input type="hidden" id="edit-tenant-id" value="">
+            <div class="space-y-3">
+                <input type="text" id="tenant-name" placeholder="Full Client Identity Name" class="w-full p-2 border rounded text-xs outline-none">
+                <input type="email" id="tenant-email" placeholder="Client Personal Email Handle" class="w-full p-2 border rounded text-xs outline-none">
+                <select id="tenant-unit" class="w-full p-2 border rounded text-xs bg-white outline-none"></select>
+                <input type="number" id="tenant-deposit" placeholder="Initial Security Deposit" value="15000" class="w-full p-2 border rounded text-xs outline-none">
+            </div>
+            <div class="flex justify-end gap-2 text-xs font-semibold"><button onclick="closeModal('modal-tenant')" class="bg-gray-100 px-4 py-2 rounded">Cancel</button><button onclick="saveTenant()" class="bg-purple-600 text-white px-4 py-2 rounded">Register Lease</button></div>
+        </div>
+    </div>
+
+    <div id="modal-payment" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <h3 class="text-md font-bold text-gray-800">Record System Payment Receipt</h3>
+            <div class="space-y-3">
+                <select id="pay-tenant-email" class="w-full p-2 border rounded text-xs bg-white outline-none"></select>
+                <input type="number" id="pay-amount" placeholder="Amount Paid (Ksh)" class="w-full p-2 border rounded text-xs outline-none">
+                <select id="pay-method" class="w-full p-2 border rounded text-xs bg-white outline-none"><option value="M-Pesa Express">M-Pesa Express STK Push</option><option value="Bank Wire">Bank Direct Wire Transfer</option><option value="Cash Handle">Cash Hand-in Counter</option></select>
+            </div>
+            <div class="flex justify-end gap-2 text-xs font-semibold"><button onclick="closeModal('modal-payment')" class="bg-gray-100 px-4 py-2 rounded">Cancel</button><button onclick="savePayment()" class="bg-purple-600 text-white px-4 py-2 rounded">Commit Ledger</button></div>
+        </div>
+    </div>
+
+    <div id="modal-history" class="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-2xl w-full p-6 shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b pb-2">
+                <h3 class="text-md font-black text-purple-950 flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span>Financial Statement History Log Ledger</span>
+                </h3>
+                <span id="history-target-id" class="text-xs bg-purple-100 text-purple-900 font-mono px-2 py-0.5 rounded font-bold">--</span>
+            </div>
+            <div class="max-h-64 overflow-y-auto rounded border bg-gray-50">
+                <table class="w-full text-left text-xs"><thead class="bg-gray-200 text-gray-700 font-bold uppercase"><tr><th class="p-2.5">Date Period</th><th class="p-2.5">Method Channel</th><th class="p-2.5">Amount Deposited</th></tr></thead><tbody id="history-modal-rows" class="divide-y divide-gray-200"></tbody></table>
+            </div>
+            <div class="flex justify-end"><button onclick="closeModal('modal-history')" class="bg-purple-900 text-white text-xs font-bold px-4 py-2 rounded shadow">Close Ledger Profile</button></div>
+        </div>
+    </div>
+
+    <script>
+        let properties = [
+            { id: 1, name: "Rox Plaza", location: "Nairobi City", landlord: "landlord@example.com" },
+            { id: 2, name: "Highway Heights", location: "Mombasa Road", landlord: "landlord@example.com" }
+        ];
+
+        let units = [
+            { id: 101, code: "A101", complex: "Rox Plaza", type: "bedsitter", rate: 15000, status: "Occupied" },
+            { id: 102, code: "B202", complex: "Rox Plaza", type: "one bedroom", rate: 25000, status: "Vacant" },
+            { id: 103, code: "C303", complex: "Highway Heights", type: "two bedroom", rate: 35000, status: "Occupied" },
+            { id: 104, code: "D404", complex: "Highway Heights", type: "commercial room", rate: 60000, status: "Vacant" }
+        ];
+
+        let tenants = [
+            { id: 1, name: "Jane Doe", email: "jane@example.com", unitCode: "A101", balance: 0, arrears: 0, depositHeld: 15000 },
+            { id: 2, name: "John Smith", email: "john@example.com", unitCode: "C303", balance: 5000, arrears: 2500, depositHeld: 35000 }
+        ];
+
+        let payments = [
+            { email: "jane@example.com", amount: 15000, method: "M-Pesa Express", timestamp: "2026-06-01 10:14" },
+            { email: "john@example.com", amount: 32500, method: "Bank Wire", timestamp: "2026-06-03 14:45" }
+        ];
+
+        // GLOBAL CHAT MEMORY DATABASE STORE (PROPAGATES MATRIX TO ALL LABELS)
+        let messages = [
+            { id: 1, sender: "admin", receiver: "jane@example.com", text: "Hello Jane, your rental statement invoice is ready.", timestamp: "2026-06-07 09:00", read: true, receiverType: "Tenant" },
+            { id: 2, sender: "jane@example.com", receiver: "admin", text: "Thanks, processing payment shortly via M-Pesa.", timestamp: "2026-06-07 09:15", read: false, receiverType: "Tenant" },
+            { id: 3, sender: "admin", receiver: "landlord@example.com", text: "Good morning, the monthly property occupancy reports are ready.", timestamp: "2026-06-07 10:00", read: true, receiverType: "Landlord" }
+        ];
+
+        let chatQueueFilter = "Tenant"; // Default focus queue for admin window view
+        let selectedChatEmail = "";
+
+        // RECYCLE BIN CENTRAL SYSTEM DATABASE DATA MEMORY
+        let recycleBin = [];
+
+        let currentLandlordEmail = "";
+        let currentTenantEmail = "";
+        let revenueChart = null, paymentPieChartInstance = null, unitsPieChartInstance = null, landlordPieInstance = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeSystemCalculations();
+            showPage('dashboard');
+            updateSystemUnreadCounters();
+        });
+
+        function globalLogout() {
+            currentLandlordEmail = "";
+            currentTenantEmail = "";
+            exitToCRM();
+            alert("Administrative user profile session signed out safely.");
+        }
+
+        function scrollGrid(boxId, distance) {
+            const el = document.getElementById(boxId);
+            if(el) el.scrollLeft += distance;
+        }
+
+        function toggleFloatingChat() {
+            showPage('communications');
+        }
+
+        function exitToCRM() {
+            showPage('dashboard');
+        }
+
+        function initializeSystemCalculations() {
+            renderPropertiesTable();
+            renderUnitsTable();
+            renderTenantsTable();
+            renderPaymentsTable();
+            renderRecycleBinTable();
+            calculateCoreAggregates();
+            updateRecycleBinCounterWidgets();
+        }
+
+        function syncBillingCycle() {
+            alert("Ledger accounting system rolled forward safely into target cycle period parameters.");
+            calculateCoreAggregates();
+        }
+
+        function getPaidAmountForMonth(unitCode) {
+            const tenant = tenants.find(t => t.unitCode === unitCode);
+            if (!tenant) return 0;
+            const matches = payments.filter(p => p.email.toLowerCase() === tenant.email.toLowerCase());
+            return matches.reduce((sum, curr) => sum + curr.amount, 0);
+        }
+
+        function calculateCoreAggregates() {
+            let totalBilled = units.reduce((acc, curr) => acc + (curr.status === "Occupied" ? curr.rate : 0), 0);
+            let totalCollected = payments.reduce((acc, curr) => acc + curr.amount, 0);
+            let totalOutstanding = tenants.reduce((acc, curr) => acc + curr.arrears, 0);
+            let totalDeposits = tenants.reduce((acc, curr) => acc + (curr.depositHeld || 0), 0);
+            let occupiedCount = units.filter(u => u.status === "Occupied").length;
+            let rate = units.length ? Math.round((occupiedCount / units.length) * 100) : 0;
+
+            document.getElementById('stat-billed').innerText = totalBilled.toLocaleString();
+            document.getElementById('stat-collected').innerText = totalCollected.toLocaleString();
+            document.getElementById('stat-outstanding').innerText = totalOutstanding.toLocaleString();
+            document.getElementById('stat-occupancy').innerText = rate + "%";
+
+            document.getElementById('stat-count-properties').innerText = properties.length;
+            document.getElementById('stat-count-units').innerText = units.length;
+            document.getElementById('stat-count-tenants').innerText = tenants.length;
+            document.getElementById('stat-count-invoices').innerText = tenants.filter(t => t.arrears > 0).length;
+
+            document.getElementById('box-tenant-count').innerText = tenants.length + " Active Contracts";
+            document.getElementById('box-tenant-paid').innerText = "Ksh " + totalCollected.toLocaleString();
+            document.getElementById('box-tenant-deposits').innerText = "Ksh " + totalDeposits.toLocaleString();
+            document.getElementById('box-tenant-arrears').innerText = "Ksh " + totalOutstanding.toLocaleString();
+        }
+
+        function renderPropertiesTable() {
+            const body = document.getElementById('table-properties-body');
+            if(!body) return; body.innerHTML = "";
+            properties.forEach(p => {
+                let uCount = units.filter(u => u.complex === p.name).length;
+                body.innerHTML += `
+                    <tr class="hover:bg-gray-50">
+                        <td class="p-4 font-semibold text-gray-900">${p.name}</td>
+                        <td class="p-4">${p.location}</td>
+                        <td class="p-4 font-mono text-xs">${p.landlord}</td>
+                        <td class="p-4 text-center font-bold">${uCount} Units</td>
+                        <td class="p-4">
+                            <div class="flex items-center justify-center space-x-2.5">
+                                <button onclick="viewPropertyFinancialHistory('${p.name}')" title="View Property Allocations" class="text-blue-600 hover:text-blue-900 transition transform hover:scale-110">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                </button>
+                                <button onclick="openEditPropertyModal(${p.id})" title="Edit Property Info" class="text-amber-600 hover:text-amber-900 transition transform hover:scale-110">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path></svg>
+                                </button>
+                                <button onclick="moveAssetToRecycleBin('Property', ${p.id}, '${p.name}', 'Location: ${p.location}')" title="Move Property to Recycle Bin" class="text-red-600 hover:text-red-900 transition transform hover:scale-110">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+            });
+            syncSelectDropdowns();
+        }
+
+        function renderUnitsTable() {
+            const body = document.getElementById('table-units-body');
+            if(!body) return; body.innerHTML = "";
+            let activeComplexMap = {};
+            properties.forEach(p => { activeComplexMap[p.name] = units.filter(u => u.complex === p.name); });
+
+            let counter = 1;
+            for (let complexName in activeComplexMap) {
+                let complexUnits = activeComplexMap[complexName];
+                if (complexUnits.length === 0) continue;
+                body.innerHTML += `<tr class="bg-purple-50 font-bold text-purple-900"><td colspan="7" class="p-3 text-xs uppercase">${counter}. Real Estate Complex Tree: ${complexName}</td></tr>`;
+                
+                complexUnits.forEach(u => {
+                    let paidVal = getPaidAmountForMonth(u.code);
+                    body.innerHTML += `
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-4 pl-8 text-xs text-gray-400">↳ Portfolio Spatial Node</td>
+                            <td class="p-4 font-mono font-bold text-purple-700">${u.code}</td>
+                            <td class="p-4 text-xs font-semibold uppercase">${u.type}</td>
+                            <td class="p-4 font-bold">Ksh ${u.rate.toLocaleString()}</td>
+                            <td class="p-4 text-center"><span class="px-2 py-1 rounded-full text-xs font-semibold ${u.status === 'Occupied' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">${u.status}</span></td>
+                            <td class="p-4 font-bold text-emerald-600">Ksh ${paidVal.toLocaleString()}</td>
+                            <td class="p-4">
+                                <div class="flex items-center justify-center space-x-2.5">
+                                    <button onclick="viewUnitCollectionHistory('${u.code}')" title="View Unit Collections" class="text-blue-600 hover:text-blue-900 transition transform hover:scale-110">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    </button>
+                                    <button onclick="openEditUnitModal(${u.id})" title="Edit Unit Parameters" class="text-amber-600 hover:text-amber-900 transition transform hover:scale-110">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path></svg>
+                                    </button>
+                                    <button onclick="moveAssetToRecycleBin('Unit', ${u.id}, '${u.code}', 'Complex: ${u.complex} | Type: ${u.type}')" title="Move Unit to Recycle Bin" class="text-red-600 hover:text-red-900 transition transform hover:scale-110">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>`;
+                });
+                counter++;
+            }
+        }
+
+        function renderTenantsTable() {
+            const body = document.getElementById('table-tenants-body');
+            if(!body) return; body.innerHTML = "";
+            tenants.forEach(t => {
+                let matchingUnit = units.find(u => u.code === t.unitCode);
+                let uType = matchingUnit ? matchingUnit.type : "unassigned";
+                let uRate = matchingUnit ? matchingUnit.rate : 0;
+                let monthPaid = getPaidAmountForMonth(t.unitCode);
+                let depHeld = t.depositHeld || 0;
+
+                body.innerHTML += `
+                    <tr class="hover:bg-gray-50">
+                        <td class="p-4 font-bold text-gray-900">${t.name}</td>
+                        <td class="p-4 font-mono text-xs">${t.email}</td>
+                        <td class="p-4"><span class="bg-gray-100 px-2 py-0.5 rounded text-xs font-mono text-gray-700">${t.unitCode}</span> <span class="text-xs text-gray-400 capitalize">(${uType})</span></td>
+                        <td class="p-4 font-semibold">Ksh ${uRate.toLocaleString()}</td>
+                        <td class="p-4 font-bold text-emerald-600">Ksh ${monthPaid.toLocaleString()}</td>
+                        <td class="p-4 font-bold text-blue-600">Ksh ${depHeld.toLocaleString()}</td>
+                        <td class="p-4 font-mono text-xs">Ksh ${t.balance.toLocaleString()}</td>
+                        <td class="p-4 font-bold text-rose-600">Ksh ${t.arrears.toLocaleString()}</td>
+                        <td class="p-4">
+                            <div class="flex items-center justify-center space-x-2.5">
+                                <button onclick="viewTenantPaymentHistory('${t.email}')" title="View Payment Records History" class="text-blue-600 hover:text-blue-900 transition transform hover:scale-110">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                </button>
+                                <button onclick="openEditTenantModal(${t.id})" title="Edit Tenant Profile Detail" class="text-amber-600 hover:text-amber-900 transition transform hover:scale-110">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"></path></svg>
+                                </button>
+                                <button onclick="moveAssetToRecycleBin('Tenant', ${t.id}, '${t.name}', 'Email: ${t.email} | Assigned Unit: ${t.unitCode}')" title="Move Tenant to Recycle Bin" class="text-red-600 hover:text-red-900 transition transform hover:scale-110">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        function renderPaymentsTable() {
+            const body = document.getElementById('table-payments-body');
+            if(!body) return; body.innerHTML = "";
+            payments.forEach(p => {
+                body.innerHTML += `
+                    <tr class="hover:bg-gray-50">
+                        <td class="p-4 font-mono text-xs text-purple-900 font-semibold">${p.email}</td>
+                        <td class="p-4 font-bold text-emerald-600">Ksh ${p.amount.toLocaleString()}</td>
+                        <td class="p-4"><span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-xs font-mono">${p.method}</span></td>
+                        <td class="p-4 text-xs font-mono text-gray-400">${p.timestamp}</td>
+                    </tr>`;
+            });
+        }
+
+        let pendingChatAttachments = {
+            Tenant: null,
+            Landlord: null,
+            Admin: null
+        };
+
+        function handleChatAttachmentSelect(portalType, files) {
+            const file = files && files[0] ? files[0] : null;
+            if(!file) {
+                pendingChatAttachments[portalType] = null;
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                pendingChatAttachments[portalType] = {
+                    name: file.name,
+                    type: file.type,
+                    size: file.size,
+                    dataUrl: event.target.result
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderChatAttachment(attachment) {
+            if(!attachment) return '';
+            const isImage = attachment.type && attachment.type.startsWith('image/');
+            if(isImage) {
+                return `
+                    <div class="mt-2 rounded-lg overflow-hidden border border-white/20 bg-white/10">
+                        <img src="${attachment.dataUrl}" alt="${attachment.name}" class="max-h-40 w-full object-cover" />
+                        <div class="px-2 py-1 text-[10px] font-mono break-all">${attachment.name}</div>
+                    </div>`;
+            }
+
+            return `
+                <a href="${attachment.dataUrl}" download="${attachment.name}" class="mt-2 inline-flex items-center gap-2 max-w-full rounded-lg border border-white/20 bg-white/10 px-2 py-1 text-[10px] break-all hover:bg-white/20 transition">
+                    <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.586-6.586A4 4 0 1012 4.93L5.343 11.59a6 6 0 108.486 8.486L20 14.9"></path></svg>
+                    <span>${attachment.name}</span>
+                </a>`;
+        }
+
+        function escapeCsvValue(value) {
+            const text = String(value ?? '');
+            return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+        }
+
+        function buildCsv(headers, rows) {
+            return [headers.join(','), ...rows.map(row => row.map(escapeCsvValue).join(','))].join('\n');
+        }
+
+        function triggerDownload(filename, content, mimeType = 'text/csv;charset=utf-8;') {
+            const blob = new Blob(['\uFEFF' + content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 0);
+        }
+
+        function openMpesaPaymentModal(defaultEmail = '') {
+            openModal('modal-payment');
+            const method = document.getElementById('pay-method');
+            const tenantEmail = document.getElementById('pay-tenant-email');
+            if(method) method.value = 'M-Pesa Express';
+            if(defaultEmail && tenantEmail) tenantEmail.value = defaultEmail;
+        }
+
+        function renderReportsSection() {
+            const tenantBody = document.getElementById('tenant-report-body');
+            const landlordBody = document.getElementById('landlord-report-body');
+
+            if(tenantBody) {
+                tenantBody.innerHTML = "";
+                tenants.forEach(t => {
+                    const matchingUnit = units.find(u => u.code === t.unitCode);
+                    const rent = matchingUnit ? matchingUnit.rate : 0;
+                    const paid = getPaidAmountForMonth(t.unitCode);
+                    const depositHeld = t.depositHeld || 0;
+                    tenantBody.innerHTML += `
+                        <tr>
+                            <td class="p-3 font-semibold text-gray-900">${t.name}</td>
+                            <td class="p-3 font-mono text-xs">${t.email}</td>
+                            <td class="p-3 font-mono text-xs">${t.unitCode}${matchingUnit ? ' · ' + matchingUnit.type : ''}</td>
+                            <td class="p-3">Ksh ${rent.toLocaleString()}</td>
+                            <td class="p-3 font-semibold text-emerald-600">Ksh ${paid.toLocaleString()}</td>
+                            <td class="p-3 font-semibold text-blue-600">Ksh ${depositHeld.toLocaleString()}</td>
+                            <td class="p-3 font-semibold text-gray-800">Ksh ${t.balance.toLocaleString()}</td>
+                            <td class="p-3 font-semibold text-rose-600">Ksh ${t.arrears.toLocaleString()}</td>
+                        </tr>`;
+                });
+            }
+
+            if(landlordBody) {
+                landlordBody.innerHTML = "";
+                properties.forEach(p => {
+                    const propertyUnits = units.filter(u => u.complex === p.name);
+                    const occupiedUnits = propertyUnits.filter(u => u.status === 'Occupied').length;
+                    const vacantUnits = propertyUnits.filter(u => u.status === 'Vacant').length;
+                    const billed = propertyUnits.reduce((sum, unit) => sum + (unit.status === 'Occupied' ? unit.rate : 0), 0);
+                    const occupancy = propertyUnits.length ? Math.round((occupiedUnits / propertyUnits.length) * 100) : 0;
+                    landlordBody.innerHTML += `
+                        <tr>
+                            <td class="p-3 font-semibold text-gray-900">${p.name}</td>
+                            <td class="p-3 text-gray-600">${p.location}</td>
+                            <td class="p-3 font-mono text-xs">${p.landlord}</td>
+                            <td class="p-3">${propertyUnits.length}</td>
+                            <td class="p-3 font-semibold text-emerald-600">${occupiedUnits}</td>
+                            <td class="p-3 font-semibold text-amber-600">${vacantUnits}</td>
+                            <td class="p-3 font-semibold text-indigo-600">${occupancy}%</td>
+                            <td class="p-3 font-semibold text-purple-700">Ksh ${billed.toLocaleString()}</td>
+                        </tr>`;
+                });
+            }
+        }
+
+        function downloadReportData(reportType) {
+            const stamp = new Date().toISOString().slice(0, 10);
+            let filename = '';
+            let csv = '';
+
+            if(reportType === 'tenant') {
+                const headers = ['Tenant', 'Email', 'Unit', 'Rent', 'Paid', 'Deposit', 'Balance', 'Arrears'];
+                const rows = tenants.map(t => {
+                    const matchingUnit = units.find(u => u.code === t.unitCode);
+                    const rent = matchingUnit ? matchingUnit.rate : 0;
+                    const paid = getPaidAmountForMonth(t.unitCode);
+                    const depositHeld = t.depositHeld || 0;
+                    return [t.name, t.email, `${t.unitCode}${matchingUnit ? ' - ' + matchingUnit.type : ''}`, rent, paid, depositHeld, t.balance, t.arrears];
+                });
+                filename = `tenant-report-${stamp}.csv`;
+                csv = buildCsv(headers, rows);
+            } else {
+                const headers = ['Property', 'Location', 'Landlord', 'Units', 'Occupied', 'Vacant', 'Occupancy %', 'Billed'];
+                const rows = properties.map(p => {
+                    const propertyUnits = units.filter(u => u.complex === p.name);
+                    const occupiedUnits = propertyUnits.filter(u => u.status === 'Occupied').length;
+                    const vacantUnits = propertyUnits.filter(u => u.status === 'Vacant').length;
+                    const billed = propertyUnits.reduce((sum, unit) => sum + (unit.status === 'Occupied' ? unit.rate : 0), 0);
+                    const occupancy = propertyUnits.length ? Math.round((occupiedUnits / propertyUnits.length) * 100) : 0;
+                    return [p.name, p.location, p.landlord, propertyUnits.length, occupiedUnits, vacantUnits, `${occupancy}%`, billed];
+                });
+                filename = `landlord-report-${stamp}.csv`;
+                csv = buildCsv(headers, rows);
+            }
+
+            triggerDownload(filename, csv);
+            const status = document.getElementById('report-status');
+            if(status) {
+                status.innerText = reportType === 'tenant' ? 'Tenant report download started.' : 'Landlord report download started.';
+                status.classList.remove('hidden');
+                setTimeout(() => status.classList.add('hidden'), 2500);
+            }
+        }
+
+        // RECYCLE BIN ENGINE OPERATION CODES & RENDER SYSTEM LAYERS
+        function updateRecycleBinCounterWidgets() {
+            const size = recycleBin.length;
+            if(document.getElementById('sidebar-bin-counter')) {
+                document.getElementById('sidebar-bin-counter').innerText = size;
+            }
+            document.querySelectorAll('.bin-counter-span').forEach(span => {
+                span.innerText = size;
+            });
+        }
+
+        function renderRecycleBinTable() {
+            const body = document.getElementById('table-recycle-body');
+            const emptyState = document.getElementById('bin-empty-placeholder');
+            if(!body) return;
+            body.innerHTML = "";
+
+            if(recycleBin.length === 0) {
+                if(emptyState) emptyState.classList.remove('hidden');
+                return;
+            } else {
+                if(emptyState) emptyState.classList.add('hidden');
+            }
+
+            recycleBin.forEach(item => {
+                body.innerHTML += `
+                    <tr class="hover:bg-red-50 transition duration-150 bg-white">
+                        <td class="p-4 font-bold text-purple-950 uppercase tracking-wide"><span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-[11px]">${item.type}</span></td>
+                        <td class="p-4 font-mono text-gray-700 font-semibold">${item.keyName}</td>
+                        <td class="p-4 text-gray-500 italic">${item.metaContext}</td>
+                        <td class="p-4 font-bold text-amber-700 font-mono">
+                            <span class="inline-block bg-amber-50 border border-amber-300 rounded px-2 py-0.5">${item.daysRemaining} Days Until Purge</span>
+                        </td>
+                        <td class="p-4">
+                            <div class="flex items-center justify-center space-x-3">
+                                <button onclick="restoreAssetFromBin(${item.binId})" title="Restore Data Row Element" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black text-[10px] px-2.5 py-1 rounded shadow-sm tracking-wide transition">
+                                    Restore
+                                </button>
+                                <button onclick="permanentPurgeAssetFromBin(${item.binId})" title="Delete Permanently" class="bg-red-600 hover:bg-red-700 text-white font-black text-[10px] px-2.5 py-1 rounded shadow-sm tracking-wide transition">
+                                    Purge
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        function moveAssetToRecycleBin(type, originalId, keyName, metaContext) {
+            if(!confirm(`Move ${type} element node "${keyName}" into the temporary system recycle storage bin?`)) return;
+            
+            let dataPayload = null;
+            if(type === 'Property') {
+                const index = properties.findIndex(p => p.id === originalId);
+                if(index !== -1) dataPayload = properties.splice(index, 1)[0];
+            } else if(type === 'Unit') {
+                const index = units.findIndex(u => u.id === originalId);
+                if(index !== -1) dataPayload = units.splice(index, 1)[0];
+            } else if(type === 'Tenant') {
+                const index = tenants.findIndex(t => t.id === originalId);
+                if(index !== -1) dataPayload = tenants.splice(index, 1)[0];
+            }
+
+            if(dataPayload) {
+                recycleBin.push({
+                    binId: Date.now() + Math.floor(Math.random() * 100),
+                    type: type,
+                    originalId: originalId,
+                    keyName: keyName,
+                    metaContext: metaContext,
+                    payload: dataPayload,
+                    daysRemaining: 60 
+                });
+                initializeSystemCalculations();
+                alert(`"${keyName}" was securely placed into isolation inside the Recycle Storage Repository.`);
+            }
+        }
+
+        function restoreAssetFromBin(binId) {
+            const index = recycleBin.findIndex(item => item.binId === binId);
+            if(index === -1) return;
+            const item = recycleBin.splice(index, 1)[0];
+
+            if(item.type === 'Property') {
+                properties.push(item.payload);
+            } else if(item.type === 'Unit') {
+                units.push(item.payload);
+            } else if(item.type === 'Tenant') {
+                tenants.push(item.payload);
+            }
+
+            initializeSystemCalculations();
+            alert(`Structural asset record element [${item.keyName}] returned back into main engine registry arrays.`);
+        }
+
+        function permanentPurgeAssetFromBin(binId) {
+            if(!confirm("Warning! This operation is destructive and cannot be reversed. Delete data row permanently?")) return;
+            const index = recycleBin.findIndex(item => item.binId === binId);
+            if(index !== -1) {
+                recycleBin.splice(index, 1);
+                initializeSystemCalculations();
+            }
+        }
+
+        function clearAllRecycleBin() {
+            if(!confirm("Purge every detached item isolated inside the storage engine right now? All items will be deleted permanently.")) return;
+            recycleBin = [];
+            initializeSystemCalculations();
+        }
+
+        function viewTenantPaymentHistory(email) {
+            document.getElementById('history-target-id').innerText = email;
+            const container = document.getElementById('history-modal-rows');
+            container.innerHTML = "";
+            const matches = payments.filter(p => p.email.toLowerCase() === email.toLowerCase());
+            
+            if(matches.length === 0) {
+                container.innerHTML = `<tr><td colspan="3" class="p-4 text-center italic text-gray-400">No payment collection cycles recorded for this account profile.</td></tr>`;
+            } else {
+                matches.forEach(m => {
+                    container.innerHTML += `<tr><td class="p-2.5 font-mono">${m.timestamp}</td><td class="p-2.5 font-bold text-purple-900">${m.method}</td><td class="p-2.5 font-black text-emerald-600">Ksh ${m.amount.toLocaleString()}</td></tr>`;
+                });
+            }
+            openModal('modal-history');
+        }
+
+        function viewPropertyFinancialHistory(propertyName) {
+            document.getElementById('history-target-id').innerText = propertyName;
+            const container = document.getElementById('history-modal-rows');
+            container.innerHTML = "";
+            let propertyUnits = units.filter(u => u.complex === propertyName).map(u => u.code);
+            let activeEmails = tenants.filter(t => propertyUnits.includes(t.unitCode)).map(t => t.email.toLowerCase());
+            const matches = payments.filter(p => activeEmails.includes(p.email.toLowerCase()));
+
+            if(matches.length === 0) {
+                container.innerHTML = `<tr><td colspan="3" class="p-4 text-center italic text-gray-400">No gross structural ledger payments recorded under this property asset.</td></tr>`;
+            } else {
+                matches.forEach(m => {
+                    container.innerHTML += `<tr><td class="p-2.5 font-mono">${m.timestamp}</td><td class="p-2.5 text-purple-700">${m.email}</td><td class="p-2.5 font-black text-emerald-600">Ksh ${m.amount.toLocaleString()}</td></tr>`;
+                });
+            }
+            openModal('modal-history');
+        }
+
+        function viewUnitCollectionHistory(unitCode) {
+            document.getElementById('history-target-id').innerText = "Unit: " + unitCode;
+            const container = document.getElementById('history-modal-rows');
+            container.innerHTML = "";
+            let tenant = tenants.find(t => t.unitCode === unitCode);
+            
+            if(!tenant) {
+                container.innerHTML = `<tr><td colspan="3" class="p-4 text-center italic text-gray-400">No lease profiles active on this unit node slot.</td></tr>`;
+            } else {
+                const matches = payments.filter(p => p.email.toLowerCase() === tenant.email.toLowerCase());
+                if(matches.length === 0) {
+                    container.innerHTML = `<tr><td colspan="3" class="p-4 text-center italic text-gray-400">No receipts allocated on this unit node.</td></tr>`;
+                } else {
+                    matches.forEach(m => {
+                        container.innerHTML += `<tr><td class="p-2.5 font-mono">${m.timestamp}</td><td class="p-2.5 text-gray-600">Payer Verified Receipt</td><td class="p-2.5 font-black text-emerald-600">Ksh ${m.amount.toLocaleString()}</td></tr>`;
+                    });
+                }
+            }
+            openModal('modal-history');
+        }
+
+        function openEditPropertyModal(id) {
+            const p = properties.find(item => item.id === id);
+            if(!p) return;
+            document.getElementById('property-modal-title').innerText = "Modify Real Estate Property Parameters";
+            document.getElementById('edit-property-id').value = p.id;
+            document.getElementById('prop-name').value = p.name;
+            document.getElementById('prop-location').value = p.location;
+            document.getElementById('prop-landlord').value = p.landlord;
+            openModal('modal-property');
+        }
+
+        function openEditUnitModal(id) {
+            const u = units.find(item => item.id === id);
+            if(!u) return;
+            document.getElementById('unit-modal-title').innerText = "Update Spatial Unit Parameters";
+            document.getElementById('edit-unit-id').value = u.id;
+            document.getElementById('unit-code').value = u.code;
+            document.getElementById('unit-complex').value = u.complex;
+            document.getElementById('unit-type').value = u.type;
+            document.getElementById('unit-rate').value = u.rate;
+            openModal('modal-unit');
+        }
+
+        function openEditTenantModal(id) {
+            const t = tenants.find(item => item.id === id);
+            if(!t) return;
+            document.getElementById('tenant-modal-title').innerText = "Edit Tenant Contract Parameters";
+            document.getElementById('edit-tenant-id').value = t.id;
+            document.getElementById('tenant-name').value = t.name;
+            document.getElementById('tenant-email').value = t.email;
+            document.getElementById('tenant-unit').value = t.unitCode;
+            document.getElementById('tenant-deposit').value = t.depositHeld;
+            openModal('modal-tenant');
+        }
+
+        function authenticateLandlord() {
+            const input = document.getElementById('auth-landlord-email').value.trim();
+            if(!input) return; currentLandlordEmail = input;
+            showPage('landlord-portal');
+            document.getElementById('lp-email-sub').innerText = "Verified Profile: " + input;
+            
+            let lProps = properties.filter(p => p.landlord.toLowerCase() === input.toLowerCase());
+            let pNames = lProps.map(p => p.name);
+            let lUnits = units.filter(u => pNames.includes(u.complex));
+            let lOccupied = lUnits.filter(u => u.status === 'Occupied');
+            let lVacant = lUnits.filter(u => u.status === 'Vacant');
+
+            let totalCollectedForLandlord = 0;
+            lOccupied.forEach(ou => {
+                let tenant = tenants.find(t => t.unitCode === ou.code);
+                if(tenant) {
+                    let payMatches = payments.filter(pm => pm.email.toLowerCase() === tenant.email.toLowerCase());
+                    totalCollectedForLandlord += payMatches.reduce((s, c) => s + c.amount, 0);
+                }
+            });
+
+            let expectedYield = lOccupied.reduce((acc, curr) => acc + curr.rate, 0);
+            document.getElementById('lp-stat-properties').innerText = lProps.length + " Buildings";
+            document.getElementById('lp-stat-occupied').innerText = lOccupied.length + " Occupied Slots";
+            document.getElementById('lp-stat-vacant').innerText = lVacant.length + " Vacant Slots";
+            document.getElementById('lp-stat-collected').innerText = "Ksh " + totalCollectedForLandlord.toLocaleString();
+            document.getElementById('lp-stat-expected').innerText = "Ksh " + expectedYield.toLocaleString();
+
+            const lpTableBody = document.getElementById('lp-table-body'); lpTableBody.innerHTML = "";
+            lProps.forEach(lp => {
+                let countU = units.filter(u => u.complex === lp.name).length;
+                lpTableBody.innerHTML += `<tr><td class="p-2 font-bold">${lp.name}</td><td class="p-2">${lp.location}</td><td class="p-2 text-center font-mono">${countU}</td></tr>`;
+            });
+            loadLandlordCharts(lOccupied.length, lVacant.length);
+            renderUserSideChatWindow('Landlord');
+        }
+
+        function authenticateTenant() {
+            const input = document.getElementById('auth-tenant-email').value.trim();
+            let profile = tenants.find(t => t.email.toLowerCase() === input.toLowerCase());
+            if(!profile) { document.getElementById('tenant-auth-error').classList.remove('hidden'); return; }
+            document.getElementById('tenant-auth-error').classList.add('hidden');
+            currentTenantEmail = profile.email;
+            showPage('tenant-portal');
+
+            document.getElementById('tp-welcome').innerText = "Welcome back, " + profile.name;
+            document.getElementById('tp-email-sub').innerText = "verified account link: " + profile.email;
+            document.getElementById('tp-unit-badge').innerText = "Assigned Slot Ref: " + profile.unitCode;
+            document.getElementById('tp-wallet').innerText = profile.balance.toLocaleString();
+            
+            let uObj = units.find(u => u.code === profile.unitCode);
+            document.getElementById('tp-rent').innerText = uObj ? uObj.rate.toLocaleString() : "0";
+            document.getElementById('tp-outstanding').innerText = profile.arrears.toLocaleString();
+            
+            renderUserSideChatWindow('Tenant');
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { 
+            document.getElementById(id).classList.add('hidden'); 
+            if(id === 'modal-property') {
+                document.getElementById('property-modal-title').innerText = "Add Property Building";
+                document.getElementById('edit-property-id').value = "";
+                document.getElementById('prop-name').value = ""; document.getElementById('prop-location').value = "";
+            }
+            if(id === 'modal-unit') {
+                document.getElementById('unit-modal-title').innerText = "Create New Unit Record Slot";
+                document.getElementById('edit-unit-id').value = "";
+                document.getElementById('unit-code').value = ""; document.getElementById('unit-rate').value = "";
+            }
+            if(id === 'modal-tenant') {
+                document.getElementById('tenant-modal-title').innerText = "Add Lease Engagement Tenant Profile";
+                document.getElementById('edit-tenant-id').value = "";
+                document.getElementById('tenant-name').value = ""; document.getElementById('tenant-email').value = "";
+            }
+        }
+
+        function saveProperty() {
+            let name = document.getElementById('prop-name').value;
+            let loc = document.getElementById('prop-location').value;
+            let land = document.getElementById('prop-landlord').value;
+            let editId = document.getElementById('edit-property-id').value;
+            if(!name || !loc) return;
+
+            if(editId) {
+                let p = properties.find(item => item.id == editId);
+                if(p) { p.name = name; p.location = loc; p.landlord = land || 'landlord@example.com'; }
+            } else {
+                properties.push({ id: Date.now(), name, location: loc, landlord: land || 'landlord@example.com' });
+            }
+            closeModal('modal-property'); initializeSystemCalculations();
+        }
+
+        function saveUnit() {
+            let code = document.getElementById('unit-code').value;
+            let complex = document.getElementById('unit-complex').value;
+            let type = document.getElementById('unit-type').value;
+            let rate = parseFloat(document.getElementById('unit-rate').value || 0);
+            let editId = document.getElementById('edit-unit-id').value;
+            if(!code) return;
+
+            if(editId) {
+                let u = units.find(item => item.id == editId);
+                if(u) { u.code = code; u.complex = complex; u.type = type; u.rate = rate; }
+            } else {
+                units.push({ id: Date.now(), code, complex, type, rate, status: "Vacant" });
+            }
+            closeModal('modal-unit'); initializeSystemCalculations();
+        }
+
+        function saveTenant() {
+            let name = document.getElementById('tenant-name').value;
+            let email = document.getElementById('tenant-email').value;
+            let unitCode = document.getElementById('tenant-unit').value;
+            let depVal = parseFloat(document.getElementById('tenant-deposit').value || 0);
+            let editId = document.getElementById('edit-tenant-id').value;
+            if(!name || !email) return;
+
+            if(editId) {
+                let t = tenants.find(item => item.id == editId);
+                if(t) { t.name = name; t.email = email; t.unitCode = unitCode; t.depositHeld = depVal; }
+            } else {
+                tenants.push({ id: Date.now(), name, email, unitCode, balance: 0, arrears: 0, depositHeld: depVal });
+                let targetUnit = units.find(u => u.code === unitCode);
+                if(targetUnit) targetUnit.status = "Occupied";
+            }
+            closeModal('modal-tenant'); initializeSystemCalculations();
+        }
+
+        function savePayment() {
+            let email = document.getElementById('pay-tenant-email').value;
+            let amount = parseFloat(document.getElementById('pay-amount').value || 0);
+            let method = document.getElementById('pay-method').value;
+            if(!email || amount <= 0) return;
+            payments.push({ email, amount, method, timestamp: "2026-06-06 12:35" });
+            closeModal('modal-payment'); initializeSystemCalculations();
+        }
+
+        function syncSelectDropdowns() {
+            let compDrop = document.getElementById('unit-complex');
+            if(compDrop) {
+                compDrop.innerHTML = "";
+                properties.forEach(p => compDrop.innerHTML += `<option value="${p.name}">${p.name}</option>`);
+            }
+            let unitDrop = document.getElementById('tenant-unit');
+            if(unitDrop) {
+                unitDrop.innerHTML = "";
+                units.filter(u => u.status === 'Vacant').forEach(u => unitDrop.innerHTML += `<option value="${u.code}">${u.code} (${u.complex})</option>`);
+                let currentEditId = document.getElementById('edit-tenant-id').value;
+                if(currentEditId) {
+                    let t = tenants.find(item => item.id == currentEditId);
+                    if(t && t.unitCode) {
+                        unitDrop.innerHTML += `<option value="${t.unitCode}" selected>${t.unitCode} (Current)</option>`;
+                    }
+                }
+            }
+            let tDrop = document.getElementById('pay-tenant-email');
+            if(tDrop) {
+                tDrop.innerHTML = "";
+                tenants.forEach(t => tDrop.innerHTML += `<option value="${t.email}">${t.email} (${t.name})</option>`);
+            }
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(s => s.classList.add('hidden'));
+            const target = document.getElementById(pageId); if(target) target.classList.remove('hidden');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-nav'));
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if(link.getAttribute('href') === '#' + pageId) {
+                    link.classList.add('active-nav');
+                }
+            });
+
+            const titleMap = {
+                'dashboard': 'Dashboard Overview Analytics Matrix',
+                'properties': 'Properties Asset Registry Ledger',
+                'units': 'Units Spatial Inventory Hierarchy',
+                'tenants': 'Tenants Profiles Lease Index',
+                'payments': 'Ledger Payments Bookkeeping Receipts',
+                'communications': 'Central Hub Communication Threads',
+                'tenant-portal': 'Tenant Gateway Personal Dashboard',
+                'landlord-portal': 'Landlord Dynamic Portfolio Environment',
+                'recycle-bin': 'Recycled Assets Engine Repository'
+            };
+            if(titleMap[pageId]) document.getElementById('panel-title').innerText = titleMap[pageId];
+
+            if(pageId === 'tenant-portal' || pageId === 'landlord-portal' || pageId === 'tenant-auth' || pageId === 'landlord-auth' || pageId === 'recycle-bin') {
+                document.getElementById('btn-crm-dashboard').classList.remove('hidden');
+                document.getElementById('btn-tenant-portal').classList.add('hidden');
+                document.getElementById('btn-landlord-portal').classList.add('hidden');
+            } else {
+                document.getElementById('btn-crm-dashboard').classList.add('hidden');
+                document.getElementById('btn-tenant-portal').classList.remove('hidden');
+                document.getElementById('btn-landlord-portal').classList.remove('hidden');
+            }
+
+            if(pageId === 'dashboard') loadDashboardCharts();
+            if(pageId === 'units') loadUnitsCharts();
+            if(pageId === 'landlord-portal') loadLandlordCharts();
+            if(pageId === 'recycle-bin') renderRecycleBinTable();
+            if(pageId === 'reports') renderReportsSection();
+            if(pageId === 'communications') renderAdminCentralChatPanel();
+
+            const mainScroll = document.querySelector('main');
+            if(mainScroll) mainScroll.scrollTop = 0;
+        }
+
+        function loadDashboardCharts() {
+            if(revenueChart) revenueChart.destroy();
+            const ctxBar = document.getElementById('revenueBarChart').getContext('2d');
+            let totalBilled = units.reduce((acc, curr) => acc + (curr.status === "Occupied" ? curr.rate : 0), 0);
+            let totalCollected = payments.reduce((acc, curr) => acc + curr.amount, 0);
+            let totalOutstanding = tenants.reduce((acc, curr) => acc + curr.arrears, 0);
+
+            revenueChart = new Chart(ctxBar, {
+                type: 'bar',
+                data: { labels: ['Portfolio Sheet'], datasets: [{ label: 'Billed', data: [totalBilled], backgroundColor: '#a855f7' }, { label: 'Collected', data: [totalCollected], backgroundColor: '#22c55e' }, { label: 'Outstanding', data: [totalOutstanding], backgroundColor: '#ef4444' }] },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            if(paymentPieChartInstance) paymentPieChartInstance.destroy();
+            const ctxPie = document.getElementById('paymentPieChart').getContext('2d');
+            paymentPieChartInstance = new Chart(ctxPie, {
+                type: 'doughnut',
+                data: { labels: ['M-Pesa Gateway Channels', 'Other Wire Systems'], datasets: [{ data: [payments.length, 1], backgroundColor: ['#16a34a', '#cbd5e1'] }] },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        function loadUnitsCharts() {
+            if(unitsPieChartInstance) unitsPieChartInstance.destroy();
+            const ctx = document.getElementById('unitsStatusPieChart').getContext('2d');
+            let occ = units.filter(u => u.status === 'Occupied').length;
+            let vac = units.filter(u => u.status === 'Vacant').length;
+            unitsPieChartInstance = new Chart(ctx, {
+                type: 'pie',
+                data: { labels: ['Occupied', 'Vacant'], datasets: [{ data: [occ, vac], backgroundColor: ['#f59e0b', '#10b981'] }] },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        function loadLandlordCharts(occ = 2, vac = 2) {
+            if(landlordPieInstance) landlordPieInstance.destroy();
+            const container = document.getElementById('landlordPieChart'); if(!container) return;
+            const ctx = container.getContext('2d');
+            landlordPieInstance = new Chart(ctx, {
+                type: 'pie',
+                data: { labels: ['Occupied Units', 'Vacant Units'], datasets: [{ data: [occ, vac], backgroundColor: ['#800000', '#e2e8f0'] }] },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        // ==========================================
+        // ADVANCED CENTRAL COMMUNICATIONS ENGINE LABELS
+        // ==========================================
+        function switchChatQueue(queueType) {
+            chatQueueFilter = queueType;
+            selectedChatEmail = "";
+            
+            const tenBtn = document.getElementById('chat-filter-tenants');
+            const landBtn = document.getElementById('chat-filter-landlords');
+            
+            if(queueType === 'Tenant') {
+                tenBtn.className = "flex-1 py-1 text-center font-semibold bg-white text-purple-700 rounded shadow-sm";
+                landBtn.className = "flex-1 py-1 text-center font-semibold hover:text-purple-200 text-white";
+            } else {
+                landBtn.className = "flex-1 py-1 text-center font-semibold bg-white text-purple-700 rounded shadow-sm";
+                tenBtn.className = "flex-1 py-1 text-center font-semibold hover:text-purple-200 text-white";
+            }
+            renderAdminCentralChatPanel();
+        }
+
+        function renderAdminCentralChatPanel() {
+            const listContainer = document.getElementById('chat-users-list');
+            if(!listContainer) return;
+            listContainer.innerHTML = "";
+
+            let userTargets = [];
+            if(chatQueueFilter === 'Tenant') {
+                tenants.forEach(t => userTargets.push({ name: t.name, email: t.email, subtitle: "Unit " + t.unitCode }));
+            } else {
+                let verifiedLandlords = [...new Set(properties.map(p => p.landlord))];
+                verifiedLandlords.forEach(lEmail => {
+                    userTargets.push({ name: "Landlord Asset Partner", email: lEmail, subtitle: lEmail });
+                });
+            }
+
+            userTargets.forEach(u => {
+                let userMessages = messages.filter(m => (m.sender.toLowerCase() === u.email.toLowerCase() || m.receiver.toLowerCase() === u.email.toLowerCase()));
+                let lastMsgText = userMessages.length > 0 ? userMessages[userMessages.length - 1].text : "No messages yet";
+                let unreadCount = userMessages.filter(m => m.sender.toLowerCase() === u.email.toLowerCase() && !m.read).length;
+                let isSelected = selectedChatEmail.toLowerCase() === u.email.toLowerCase();
+
+                listContainer.innerHTML += `
+                    <div onclick="selectAdminChatTarget('${u.email}', '${u.name}')" class="p-3 flex items-center justify-between cursor-pointer transition ${isSelected ? 'bg-purple-50 border-l-4 border-purple-600' : 'hover:bg-gray-50'}">
+                        <div class="flex items-center space-x-3 overflow-hidden">
+                            <div class="w-10 h-10 rounded-full bg-purple-600 text-white font-bold flex items-center justify-center shrink-0">
+                                ${u.name.charAt(0)}
+                            </div>
+                            <div class="overflow-hidden">
+                                <h4 class="font-bold text-xs text-gray-800 truncate">${u.name}</h4>
+                                <p class="text-[11px] text-purple-600 font-medium truncate">${u.subtitle}</p>
+                                <p class="text-[11px] text-gray-400 truncate mt-0.5">${lastMsgText}</p>
+                            </div>
+                        </div>
+                        ${unreadCount > 0 ? `<span class="bg-emerald-500 text-white font-bold text-[9px] px-1.5 py-0.5 rounded-full shrink-0">${unreadCount}</span>` : ''}
+                    </div>`;
+            });
+
+            if(selectedChatEmail) {
+                renderAdminActiveThreadLogs();
+            } else {
+                document.getElementById('chat-messages-container').innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-gray-400 p-6 text-center">
+                        <svg class="w-12 h-12 mb-2 text-gray-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        <p class="font-medium">Select an active contact node thread on the left pane to begin chatting.</p>
+                    </div>`;
+                document.getElementById('chat-window-header').innerText = "Select a thread message log";
+                document.getElementById('chat-target-avatar').innerText = "?";
+            }
+        }
+
+        function selectAdminChatTarget(email, name) {
+            selectedChatEmail = email;
+            document.getElementById('chat-window-header').innerText = name;
+            document.getElementById('chat-target-avatar').innerText = name.charAt(0);
+            
+            // Mark items as read instantly
+            messages.forEach(m => {
+                if(m.sender.toLowerCase() === email.toLowerCase() && m.receiver === 'admin') {
+                    m.read = true;
+                }
+            });
+            updateSystemUnreadCounters();
+            renderAdminCentralChatPanel();
+        }
+
+        function renderAdminActiveThreadLogs() {
+            const container = document.getElementById('chat-messages-container');
+            if(!container) return;
+            container.innerHTML = "";
+
+            let activeThreadMsgs = messages.filter(m => (m.sender.toLowerCase() === selectedChatEmail.toLowerCase() || m.receiver.toLowerCase() === selectedChatEmail.toLowerCase()));
+
+            activeThreadMsgs.forEach(m => {
+                let isAdmin = m.sender === 'admin';
+                container.innerHTML += `
+                    <div class="flex ${isAdmin ? 'justify-end' : 'justify-start'} w-full">
+                        <div class="max-w-[75%] rounded-lg p-2.5 shadow-sm relative ${isAdmin ? 'bg-purple-600 text-white rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none'}">
+                            <p class="text-xs leading-relaxed break-words">${m.text}</p>
+                            ${renderChatAttachment(m.attachment)}
+                            <div class="mt-1 flex items-center justify-end gap-1.5">
+                                ${isAdmin ? (m.read ? `
+                                    <span class="inline-flex items-center text-blue-200" title="Read">
+                                        <svg class="w-3 h-3" viewBox="0 0 20 20" fill="currentColor"><path d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.2 7.236a1 1 0 0 1-1.42-.002l-3.8-3.825a1 1 0 1 1 1.42-1.402l3.09 3.112 6.49-6.53a1 1 0 0 1 1.414-.003Z"/><path d="M11.704 5.29a1 1 0 0 1 .006 1.414l-7.2 7.236a1 1 0 0 1-1.42-.002l-1.3-1.309a1 1 0 1 1 1.42-1.402l.59.593 6.49-6.53a1 1 0 0 1 1.414-.003Z"/></svg>
+                                    </span>
+                                ` : `
+                                    <span class="inline-flex items-center text-white/70" title="Sent">
+                                        <svg class="w-3 h-3" viewBox="0 0 20 20" fill="currentColor"><path d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.2 7.236a1 1 0 0 1-1.42-.002l-3.8-3.825a1 1 0 1 1 1.42-1.402l3.09 3.112 6.49-6.53a1 1 0 0 1 1.414-.003Z"/></svg>
+                                    </span>
+                                `) : ''}
+                                <span class="text-[9px] text-right opacity-70 font-mono">${m.timestamp.split(' ')[1]}</span>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+            setTimeout(() => { container.scrollTop = container.scrollHeight; }, 50);
+        }
+
+        function handleMessageSending() {
+            const input = document.getElementById('chat-input-text');
+            if(!input || !input.value.trim() || !selectedChatEmail) return;
+
+            const attachment = pendingChatAttachments.Admin;
+            messages.push({
+                id: messages.length + 1,
+                sender: "admin",
+                receiver: selectedChatEmail,
+                text: input.value.trim(),
+                timestamp: "2026-06-07 12:40",
+                read: false,
+                receiverType: chatQueueFilter,
+                attachment: attachment
+            });
+
+            input.value = "";
+            pendingChatAttachments.Admin = null;
+            const adminAttachment = document.getElementById('chat-attachment');
+            if(adminAttachment) adminAttachment.value = "";
+            renderAdminActiveThreadLogs();
+            
+            // Mirror logic immediately to target user page if open
+            if(currentTenantEmail) renderUserSideChatWindow('Tenant');
+            if(currentLandlordEmail) renderUserSideChatWindow('Landlord');
+        }
+
+        // ==========================================
+        // PORTAL CLIENT ACCESS-SIDE MESSAGING LAYERS
+        // ==========================================
+        function renderUserSideChatWindow(portalType) {
+            let containerId = portalType === 'Tenant' ? 'tp-chat-messages-container' : 'lp-chat-messages-container';
+            const container = document.getElementById(containerId);
+            if(!container) return;
+            container.innerHTML = "";
+
+            let clientEmail = portalType === 'Tenant' ? currentTenantEmail : currentLandlordEmail;
+            if(!clientEmail) return;
+
+            let readStateChanged = false;
+            messages.forEach(m => {
+                if(m.sender.toLowerCase() === 'admin' && m.receiver.toLowerCase() === clientEmail.toLowerCase() && !m.read) {
+                    m.read = true;
+                    readStateChanged = true;
+                }
+            });
+
+            if(readStateChanged) {
+                updateSystemUnreadCounters();
+                if(document.getElementById('communications') && document.getElementById('communications').classList.contains('hidden') === false) {
+                    renderAdminCentralChatPanel();
+                }
+            }
+
+            let threadMsgs = messages.filter(m => (m.sender.toLowerCase() === clientEmail.toLowerCase() || m.receiver.toLowerCase() === clientEmail.toLowerCase()));
+
+            if(threadMsgs.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-400 italic py-4">No message history logs. Send a message to connect with administration.</p>`;
+            } else {
+                threadMsgs.forEach(m => {
+                    let isMe = m.sender.toLowerCase() === clientEmail.toLowerCase();
+                    container.innerHTML += `
+                        <div class="flex ${isMe ? 'justify-end' : 'justify-start'} w-full">
+                            <div class="max-w-[80%] rounded-lg p-2 shadow-sm ${isMe ? (portalType === 'Tenant' ? 'bg-purple-600 text-white rounded-tr-none' : 'bg-indigo-600 text-white rounded-tr-none') : 'bg-gray-200 text-gray-800 rounded-tl-none'}">
+                                <p class="break-words">${m.text}</p>
+                                ${renderChatAttachment(m.attachment)}
+                                <span class="block text-[8px] text-right mt-0.5 opacity-60">${m.timestamp.split(' ')[1]}</span>
+                            </div>
+                        </div>`;
+                });
+            }
+            setTimeout(() => { container.scrollTop = container.scrollHeight; }, 50);
+        }
+
+        function sendUserSideMessage(portalType) {
+            let inputId = portalType === 'Tenant' ? 'tp-chat-input' : 'lp-chat-input';
+            const input = document.getElementById(inputId);
+            let clientEmail = portalType === 'Tenant' ? currentTenantEmail : currentLandlordEmail;
+            
+            if(!input || !input.value.trim() || !clientEmail) return;
+
+            const attachment = pendingChatAttachments[portalType];
+            messages.push({
+                id: messages.length + 1,
+                sender: clientEmail,
+                receiver: "admin",
+                text: input.value.trim(),
+                timestamp: "2026-06-07 12:42",
+                read: false,
+                receiverType: portalType,
+                attachment: attachment
+            });
+
+            input.value = "";
+            pendingChatAttachments[portalType] = null;
+            const attachmentInput = document.getElementById(portalType === 'Tenant' ? 'tp-chat-attachment' : 'lp-chat-attachment');
+            if(attachmentInput) attachmentInput.value = "";
+            renderUserSideChatWindow(portalType);
+            updateSystemUnreadCounters();
+            
+            // Instantly refresh admin panel view if open
+            if(document.getElementById('communications').classList.contains('hidden') === false) {
+                renderAdminCentralChatPanel();
+            }
+        }
+
+        function updateSystemUnreadCounters() {
+            let totalUnread = messages.filter(m => m.receiver === 'admin' && !m.read).length;
+            
+            const floatingCounter = document.getElementById('floating-chat-counter');
+            const navCounter = document.getElementById('nav-chat-counter');
+
+            if(totalUnread > 0) {
+                if(floatingCounter) { floatingCounter.innerText = totalUnread; floatingCounter.classList.remove('hidden'); }
+                if(navCounter) { navCounter.innerText = totalUnread; navCounter.classList.remove('hidden'); }
+            } else {
+                if(floatingCounter) floatingCounter.classList.add('hidden');
+                if(navCounter) navCounter.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
+
